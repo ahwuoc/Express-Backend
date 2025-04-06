@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": ["reflect-metadata"],
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+  },
+  "include": ["src/**/*.ts", "src/services/user.service.ts"],
+  "exclude": ["node_modules"]
+}
