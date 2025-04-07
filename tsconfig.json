@@ -10,9 +10,6 @@
     "rootDir": "./src",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "types": ["reflect-metadata"],
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
   },
   "include": ["src/**/*.ts", "src/services/user.service.ts"],
   "exclude": ["node_modules"]

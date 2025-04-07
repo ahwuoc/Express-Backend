@@ -1,14 +1,20 @@
-import Controller from "../decorator/controller.decorator";
+import { Controller } from "../decorator/controller.decorator";
+import commonService from "../services/common.service";
 import profileService from "../services/profile.service";
 import { userService } from "../services/user.service";
-@Controller()
-export default class userControler {
+import { Get, Post } from "../decorator/method.decorator";
+@Controller("/users")
+class userControler {
   constructor(
-    private userServices: userService,
-    private profileService: profileService
+    public userServices: userService,
+    public profileServices: profileService,
+    public comminServices: commonService
   ) {}
+  @Get()
   getUser() {
-    console.log("get users");
     this.userServices.createUser();
   }
+  @Post()
+  AddUser() {}
 }
+export default userControler;

@@ -1,12 +1,11 @@
-import express from "express";
 import "reflect-metadata";
-import Container from "./core/di/container.di";
+import AppManager from "./core/App.Manager";
 import userControler from "./controller/userController";
-const app = express();
 const PORT = 3000;
 
-const container = new Container();
-container.register(userControler);
-const user = container.get(userControler);
+const appManager = new AppManager({
+  controllers: [userControler],
+});
 
+const app = appManager.init();
 app.listen(PORT, () => console.log(`App running at the localhost:${PORT}`));
