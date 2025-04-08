@@ -10,11 +10,10 @@ export default class AuthGuard implements AppMiddleware {
   use(req: Request, res: Response, next: NextFunction): void {
     if (req.context) {
       const { instance, handlerName } = req.context;
-      const isProtected = getMetadata(
-        PROTECTED_METADATA_KEY,
-        instance[handlerName] ??
-          getMetadata(PROTECTED_METADATA_KEY, instance.constructor)
-      );
+
+      const isProtected =
+        getMetadata(PROTECTED_METADATA_KEY, instance[handlerName]) ??
+        getMetadata(PROTECTED_METADATA_KEY, instance.constructor);
       if (isProtected) {
         console.log("Can dang nhap");
       }
