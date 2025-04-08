@@ -1,20 +1,21 @@
 import { Controller } from "../decorator/controller.decorator";
-import commonService from "../services/common.service";
-import profileService from "../services/profile.service";
-import { userService } from "../services/user.service";
-import { Get, Post } from "../decorator/method.decorator";
-@Controller("/users")
+
+import { Get, Post, Delete, Patch } from "../decorator/method.decorator";
+import { Inject } from "../decorator/params.decorator";
+@Controller("users")
 class userControler {
-  constructor(
-    public userServices: userService,
-    public profileServices: profileService,
-    public comminServices: commonService
-  ) {}
+  constructor(@Inject("test") private useService: string) {}
   @Get()
   getUser() {
-    this.userServices.createUser();
+    return this.useService;
   }
-  @Post()
+  @Post(":id")
   AddUser() {}
+
+  @Delete(":id")
+  DeleteUser() {}
+
+  @Patch("/data/")
+  UpdateUser() {}
 }
 export default userControler;

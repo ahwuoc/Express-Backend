@@ -1,4 +1,5 @@
-import { StringLiteral } from "typescript";
+import { setMetadata } from "../core/metedata/metadata";
+import { METADATA_KEYS } from "../ultils/constant";
 
 export function Body(): ParameterDecorator {
   return (
@@ -8,3 +9,9 @@ export function Body(): ParameterDecorator {
   ) => {};
 }
 
+export const Inject = (value: any): ParameterDecorator => {
+  return setMetadata(
+    METADATA_KEYS.param_metadata_key,
+    value
+  ) as ParameterDecorator;
+};

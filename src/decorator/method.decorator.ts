@@ -1,6 +1,6 @@
 import { setMetadata } from "../core/metedata/metadata";
-import { METADATA_KEYS } from "../Ultis/constant";
-import { Method } from "../Ultis/types";
+import { METADATA_KEYS } from "../ultils/constant";
+import { Method } from "../ultils/types";
 function createMethod(method: Method) {
   return (path = ""): MethodDecorator =>
     setMetadata(METADATA_KEYS.method_metadata_key, {

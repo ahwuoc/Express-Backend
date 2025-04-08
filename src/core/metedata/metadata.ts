@@ -1,40 +1,41 @@
-// Class Decoractor ko co propertyKey
-// Paramerter Decoractor ko the can thiep dc vao ham
+import { MetadataStorage, MethodWithMetadata } from "../../ultils/types";
 export function setMetadata(
   key: string | symbol,
   value: any
 ): ClassDecorator | MethodDecorator | ParameterDecorator {
   return function (
-    target: any,
+    target: MetadataStorage,
     propertyKey?: string | symbol,
     descriptorOrParamIndex?: PropertyDescriptor | number
   ) {
     // =======ParamDecorato Methodr========
     if (propertyKey && typeof descriptorOrParamIndex === "number") {
-      if (!target[propertyKey].paramMetada) {
-        target[propertyKey].paramMetada = [];
+      const fn = target[propertyKey] as MethodWithMetadata;
+      if (!fn.paramMetadata) {
+        fn.paramMetadata = [];
       }
-      target[propertyKey].paramMetada[descriptorOrParamIndex] = {
+      fn.paramMetadata[descriptorOrParamIndex] = { key, value };
+    }
+    // =======ParamDecorato Constructor========
+    else if (!propertyKey && typeof descriptorOrParamIndex === "number") {
+      if (!target.paramMetadata) {
+        target.paramMetadata = [];
+      }
+      target.paramMetadata[descriptorOrParamIndex] = {
         key,
         value,
       };
     }
-    // =======ParamDecorato Constructor========
-    else if (!propertyKey && typeof descriptorOrParamIndex === "number") {
-      if (!target.paramMetada) {
-        target.paramMetada = [];
-      }
-      target.paramMetada = {
-        key,
-        value,
-      };
-    } else if (propertyKey && descriptorOrParamIndex) {
+    // Method decorator
+    else if (propertyKey && descriptorOrParamIndex) {
       const descriptor = descriptorOrParamIndex as PropertyDescriptor;
       if (!descriptor.value.metadata) {
         descriptor.value.metadata = {};
       }
       descriptor.value.metadata[key] = value;
-    } else {
+    }
+    // ======Class Decoractor====
+    else {
       if (!target.metadata) {
         target.metadata = {};
       }
@@ -42,11 +43,23 @@ export function setMetadata(
     }
   };
 }
-
-export function getMetadata(key: string | symbol, target: any) {
-  return target.metadata[key];
+// ============Handle Get getMetada===========
+export function getMetadata(
+  key: string | symbol,
+  target: MetadataStorage,
+  paramIndex?: number
+) {
+  if (paramIndex !== undefined && target.paramMetadata) {
+    return target.paramMetadata[paramIndex];
+  } else if (target.metadata) {
+    return target.metadata[key];
+  }
+  return undefined;
 }
 
-export function getAllMetadata(target: any) {
-  return target;
+export function getAllMetadata(target: MetadataStorage) {
+  if (target) {
+    return target;
+  }
+  return undefined;
 }

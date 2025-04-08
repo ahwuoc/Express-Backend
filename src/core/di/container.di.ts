@@ -1,3 +1,6 @@
+import { METADATA_KEYS } from "../../ultils/constant";
+import { getMetadata } from "../metedata/metadata";
+
 export type Constructor<T> = new (...args: any) => T;
 
 export class Container {
@@ -17,10 +20,29 @@ export class Container {
       return this.registerd.get(service.name);
     }
     const paramTypes = Reflect.getMetadata("design:paramtypes", service) ?? [];
+    ///Manager Denependecies
 
-    const dependencies = paramTypes.map((params: Constructor<any>) => {
-      this.register(params);
-      return this.get(params);
+    let dependencies = paramTypes.map((param: Constructor<any>) => {
+      this.register(param);
+      return this.get(param);
+    });
+    ///Replace constructor param 
+    dependencies = dependencies.map((dependency: any, index: number) => {
+      const shouldReplaced = getMetadata(
+        METADATA_KEYS.param_metadata_key,
+        service,
+        index
+      );
+      if (shouldReplaced) {
+        try {
+          new shouldReplaced.value();
+          this.register(shouldReplaced.value);
+          return this.get(shouldReplaced.value);
+        } catch (error) {
+          return shouldReplaced.value;
+        }
+      }
+      return dependency;
     });
     const instance = new service(...dependencies);
     this.registerd.set(service.name, instance);

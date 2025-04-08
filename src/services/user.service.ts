@@ -1,9 +1,11 @@
 import Injectable from "../decorator/InjecTable.decorator";
-import commonServices from "./common.service";
+import { Inject } from "../decorator/params.decorator";
+import commonService from "./common.service";
 @Injectable()
 export class userService {
-  constructor(public commonService: commonServices) {}
+  constructor(@Inject(commonService) private commonService: commonService) {}
+
   createUser() {
-    console.log("Tao users");
+    return this.commonService.createUser();
   }
 }

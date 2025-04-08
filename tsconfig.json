@@ -11,6 +11,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
   },
-  "include": ["src/**/*.ts", "src/services/user.service.ts"],
+  "include": ["src/**/*.ts", "src/services/user.service.ts", "src/core/base/error-middleware.base.ts"],
   "exclude": ["node_modules"]
 }
