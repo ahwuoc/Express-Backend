@@ -1,11 +1,14 @@
-import Injectable from "../decorator/InjecTable.decorator";
-import { Inject } from "../decorator/params.decorator";
-import commonService from "./common.service";
+import UserModel from "../db/model/use.model";
+import Injectable from "../core/decorators/InjecTable.decorator";
+import { Inject } from "../core/decorators/params.decorator";
 @Injectable()
 export class userService {
-  constructor(@Inject(commonService) private commonService: commonService) {}
+  constructor(@Inject(UserModel) private useModel: typeof UserModel) {}
 
-  createUser() {
-    return this.commonService.createUser();
+  async createUser(body: any) {
+    return await this.useModel.create(body);
+  }
+  async find() {
+    return await this.useModel.find();
   }
 }

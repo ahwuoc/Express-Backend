@@ -1,4 +1,4 @@
-import { Controller } from "../decorator/controller.decorator";
+import { Controller } from "../core/decorators/controller.decorator";
 import profileService from "../services/profile.service";
 
 @Controller()

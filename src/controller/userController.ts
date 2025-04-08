@@ -1,21 +1,22 @@
-import { Controller } from "../decorator/controller.decorator";
+import { Controller } from "../core/decorators/controller.decorator";
 
-import { Get, Post, Delete, Patch } from "../decorator/method.decorator";
-import { Inject } from "../decorator/params.decorator";
+import { Get, Post, Delete, Patch } from "../core/decorators/method.decorator";
+import { Body, Inject, Req, Res } from "../core/decorators/params.decorator";
+import type { Response } from "express";
+import { userService } from "../services/user.service";
+import { Protected } from "../decorators/proteced.decoractor";
 @Controller("users")
 class userControler {
-  constructor(@Inject("test") private useService: string) {}
-  @Get()
-  getUser() {
-    return this.useService;
+  constructor(@Inject(userService) private useService: userService) {}
+
+  @Protected()
+  @Get("/get")
+  test() {
+    return "1";
   }
-  @Post(":id")
-  AddUser() {}
-
-  @Delete(":id")
-  DeleteUser() {}
-
-  @Patch("/data/")
-  UpdateUser() {}
+  @Get(":id")
+  test2() {
+    return "2";
+  }
 }
 export default userControler;

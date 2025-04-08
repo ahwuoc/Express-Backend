@@ -1,4 +1,4 @@
-import { MetadataStorage, MethodWithMetadata } from "../../ultils/types";
+import { MetadataStorage, MethodWithMetadata } from "../utils/types";
 export function setMetadata(
   key: string | symbol,
   value: any

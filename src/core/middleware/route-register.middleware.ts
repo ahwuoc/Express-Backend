@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import AppMiddleware from "../base/middleware.base";
-import { Request } from "../../ultils/types";
-import Injectable from "../../decorator/InjecTable.decorator";
+import { Request } from "../utils/types";
+import Injectable from "../decorators/InjecTable.decorator";
 @Injectable()
 export default class RouteRegisterMiddleware implements AppMiddleware {
   instance: any;
