@@ -14,8 +14,8 @@ export default class RouteRegisterMiddleware implements AppMiddleware {
     const context = {
       instance: this.instance,
       handlerName: this.handlerName,
+      params: req.params,
     };
-
     req.context = context;
     next();
   }

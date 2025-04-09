@@ -12,6 +12,7 @@ export type Request = ERequest & {
   context: {
     instance: any;
     handlerName: string;
+    params: any;
   };
 };
 
@@ -36,15 +37,21 @@ export type MiddlewareFunction = (
   res: Response,
   next: NextFunction
 ) => void;
-
+export type MiddlewareFunctionError = {
+  error: ERequest;
+  req: Request;
+  res: Response;
+  next: NextFunction;
+};
 export type MiddlewareClass = Constructor<any>;
 
 export type MiddlewareForRoute = {
-  forRoute: string;
+  forRoutes: string[];
   useClass: MiddlewareClass;
 };
 
 export type TMiddlewareItem =
   | MiddlewareFunction
+  | MiddlewareFunctionError
   | MiddlewareClass
   | MiddlewareForRoute;

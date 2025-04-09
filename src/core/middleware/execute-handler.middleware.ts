@@ -8,6 +8,7 @@ export default class ExecuteHandlerMiddleware implements AppMiddleware {
     try {
       if (req.context) {
         const { context } = req;
+        req.params = context.params;
         const instance = context.instance;
         const handlerName = context.handlerName;
         const result = await instance[handlerName](req, res, next);

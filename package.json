@@ -16,6 +16,7 @@
     "chalk": "^5.4.1",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
+    "express-list-endpoints": "^7.1.1",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.2",
     "reflect-metadata": "^0.2.2",

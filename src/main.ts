@@ -2,30 +2,26 @@ import "reflect-metadata";
 import AppManager from "./core/App.Manager";
 import userControler from "./controller/userController";
 import connectMongo from "./db/connect.db";
-import TestMiddleware from "./middlewares/test.middleware";
-import { MiddlewareClass, MiddlewareForRoute } from "./core/utils/types";
-import AuthGuard from "./guards/auth.middleware";
+import HandleMiddleware from "./middlewares/handler.middleware";
+import AuthGuard from "./guards/auth.guard";
+import { categoryController } from "./controller/categoryController";
 const PORT = 3000;
-
-//  ===========Midleware Global=======
-// const classMiddlewares: MiddlewareClass[] = [SomeMiddleware];
-
-// ===========Middleware Route cụ thể=========
-// const routeSpecific: MiddlewareForRoute[] = [
-//   { forRoute: "/api", useClass: CustomMiddleware }
-// ];
-
 const appManager = new AppManager({
-  controllers: [userControler],
+  controllers: [userControler, categoryController],
   prefix: ["api"],
-  middlewares: [],
-  guards: [AuthGuard],
+  middlewares: [HandleMiddleware],
+  guards: [
+    // {
+    //   forRoutes: ["/users", "/categories"],
+    //   useClass: AuthGuard,
+    // },
+  ],
 });
 
 (async () => {
   await connectMongo();
-  const AppServer = appManager.init();
-  AppServer.listen(PORT, () => {
+  const app = appManager.init();
+  app.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`);
   });
 })();

@@ -1,10 +1,10 @@
 import { Controller } from "../core/decorators/controller.decorator";
-import profileService from "../services/profile.service";
+import { Get } from "../core/decorators/method.decorator";
 
-@Controller()
-export default class categoryController {
-  constructor(public profileService: profileService) {}
-  getCategory() {
-    console.log("Get Category");
+@Controller("/categories")
+export class categoryController {
+  @Get()
+  getAll() {
+    return "All Danh Muc";
   }
 }
