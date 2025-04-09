@@ -5,7 +5,7 @@ import { BaseResponseFormatter } from "./middleware/response-formatter.middlewar
 import { NotFoundMiddleware } from "./middleware/404-handler.middleware";
 import { routeRegister } from "./routes/register-route";
 import { combinePaths } from "./utils/common";
-import express, { Application } from "express";
+import express, { Application, NextFunction } from "express";
 import {
   Constructor,
   MiddlewareFunction,
@@ -63,10 +63,30 @@ export default class AppManager {
     this.applyMiddlewares(...this.interceptors);
     this.applyMiddlewares(ExecuteHandlerMiddleware);
     this.applyMiddlewares(BaseResponseFormatter);
-    this.applyMiddlewares(ErrorHandlerMiddleware);
+    this.applyErrorMiddlewares(ErrorHandlerMiddleware);
+    // this.applyMiddlewares(ErrorHandlerMiddleware);
     return this.app;
   }
 
+  applyErrorMiddlewares(...middlewares: TMiddleware) {
+    if (middlewares && middlewares.length > 0) {
+      middlewares.forEach((middleware) => {
+        middleware = middleware as Constructor<any>;
+        new middleware();
+        this.container.register(middleware);
+        const instance = this.container.get(middleware);
+
+        this.app.use(((
+          error: any,
+          req: Request,
+          res: Response,
+          next: NextFunction
+        ) => {
+          instance.use(error, req, res, next);
+        }) as any);
+      });
+    }
+  }
   DIregister() {
     this.instances = this.controllers.map((controller) => {
       this.container.register(controller);

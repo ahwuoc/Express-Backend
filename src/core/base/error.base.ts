@@ -1,4 +1,4 @@
-export default class BadRequestException extends Error {
+export class BadRequestException extends Error {
   statusCode!: number;
   message!: any;
   constructor(message: any) {
@@ -7,5 +7,15 @@ export default class BadRequestException extends Error {
       this.message = message;
     }
     this.statusCode = 400;
+  }
+}
+
+export class ForbiddenException extends Error {
+  statusCode: number;
+  message: string;
+  constructor() {
+    super();
+    this.statusCode = 403;
+    this.message = "Forbidden";
   }
 }

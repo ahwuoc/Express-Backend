@@ -23,3 +23,5 @@ export const Res = (): ParameterDecorator =>
     METADATA_KEYS.param_metadata_key,
     (req: Request, res: Response) => res
   ) as ParameterDecorator;
+
+export const  Param = (field:string):ParameterDecorator => setMetadata(METADATA_KEYS.param_metadata_key,(req:Request) => req.params[field] ?? undefined) as ParameterDecorator

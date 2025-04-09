@@ -5,17 +5,15 @@ import connectMongo from "./db/connect.db";
 import HandleMiddleware from "./middlewares/handler.middleware";
 import AuthGuard from "./guards/auth.guard";
 import { categoryController } from "./controller/categoryController";
+import { AuthenController } from "./controller/AuthController";
+import dotenv from "dotenv";
+dotenv.config();
 const PORT = 3000;
 const appManager = new AppManager({
-  controllers: [userControler, categoryController],
+  controllers: [userControler, categoryController, AuthenController],
   prefix: ["api"],
   middlewares: [HandleMiddleware],
-  guards: [
-    // {
-    //   forRoutes: ["/users", "/categories"],
-    //   useClass: AuthGuard,
-    // },
-  ],
+  // guards: [AuthGuard],
 });
 
 (async () => {
