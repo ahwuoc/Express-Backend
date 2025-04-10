@@ -1,6 +1,7 @@
 import { METADATA_KEYS } from "../utils/constant";
 import { getMetadata, setMetadata } from "../metedata/metadata";
 import { Constructor } from "../utils/types";
+import { defaultMethods } from "../utils/common";
 
 export class Container {
   services = new Map<string, Constructor<any>>();
@@ -19,13 +20,11 @@ export class Container {
       return this.registerd.get(service.name);
     }
     const paramTypes = Reflect.getMetadata("design:paramtypes", service) ?? [];
-    ///Manager Denependecies
 
     let dependencies = paramTypes.map((param: Constructor<any>) => {
       this.register(param);
       return this.get(param);
     });
-    ///Replace constructor param
     dependencies = dependencies.map((dependency: any, index: number) => {
       const shouldReplaced = getMetadata(
         METADATA_KEYS.param_metadata_key,
@@ -43,12 +42,10 @@ export class Container {
       }
       return dependency;
     });
-    // Replace method params with decoractor
     const methods = Object.getOwnPropertyNames(service.prototype).filter(
-      (method) => method != "constructor"
+      (method) => !defaultMethods.includes(method)
     );
 
-    ///
     methods.forEach((method) => {
       if (typeof service.prototype[method] === "function") {
         const paramTypes =
@@ -90,6 +87,10 @@ export class Container {
       }
     });
     const instance = new service(...dependencies);
+
+    if (typeof instance.onInit === "function") {
+      instance.onInit();
+    }
     this.registerd.set(service.name, instance);
     return instance;
   }

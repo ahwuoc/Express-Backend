@@ -10,6 +10,7 @@ import { UploadController } from "./controller/uploadController";
 import { SingleFileUploadMiddleware } from "./middlewares/single-upload.middleware";
 import path from "path";
 import express from "express";
+import { ChatController } from "./controller/chatController";
 
 dotenv.config();
 const PORT = 3000;
@@ -19,6 +20,7 @@ const appManager = new AppManager({
     categoryController,
     AuthenController,
     UploadController,
+    ChatController,
   ],
   prefix: ["api"],
   middlewares: [
@@ -35,6 +37,6 @@ const appManager = new AppManager({
   const app = appManager.init();
   app.use("/static", express.static(path.resolve("./uploads")));
   app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+    console.log(`🌟 Server running at http://localhost:${PORT}`);
   });
 })();

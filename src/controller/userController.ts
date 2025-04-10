@@ -17,8 +17,11 @@ class userControler {
   add(@Body() body: any) {
     return this.useService.createUser(body);
   }
+  @Post("post/:id")
+  test23() {
+    return "test xem lay params";
+  }
 
-  @Protected()
   @Get("/test")
   chaoem() {
     return "co quyen truy cap";
@@ -32,6 +35,11 @@ class userControler {
   @Delete(":id")
   delete(@Param("id") id: string) {
     return this.useService.delete(id);
+  }
+
+  // hàm chạy default
+  onInit() {
+    return console.log("Test init controller");
   }
 }
 export default userControler;

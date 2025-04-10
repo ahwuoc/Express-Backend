@@ -31,6 +31,14 @@ export interface MethodWithMetadata extends Function {
     value: any;
   }>;
 }
+export type TGateway = {
+  namespace?: string;
+  port?: number;
+  cors?: {
+    origin?: string;
+    method?: Method;
+  };
+};
 
 export type MiddlewareFunction = (
   req: ERequest,
