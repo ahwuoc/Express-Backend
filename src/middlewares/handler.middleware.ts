@@ -8,8 +8,6 @@ import { AppService } from "../core/app/app.service";
 export default class HandleMiddleware implements AppMiddleware {
   constructor(private AppService: AppService) {}
   use(req: Request, res: Response, next: NextFunction): void {
-
-    console.log("xử lý middleware");
     next();
   }
 }

@@ -14,7 +14,7 @@ export class JwtStrategy extends Strategy {
         secretOrKey: JWT_SECRET!,
         passReqToCallback: true,
       },
-      (payload: JwtPayload, done: VerifiedCallback) => {
+      (req: Request, payload: JwtPayload, done: VerifiedCallback) => {
         this.validate(payload, done);
       }
     );

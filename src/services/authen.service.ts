@@ -1,17 +1,14 @@
 import { BadRequestException } from "../core/base/error.base";
-import { Controller } from "../core/decorators/controller.decorator";
-import { Post } from "../core/decorators/method.decorator";
-import { Body, Inject } from "../core/decorators/params.decorator";
+import Injectable from "../core/decorators/InjecTable.decorator";
+import { Inject } from "../core/decorators/params.decorator";
 import UserModel from "../db/model/use.model";
 import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
-
-@Controller()
-export class AuthenController {
+@Injectable()
+export class AuthenService {
   constructor(@Inject(UserModel) private usermodel: typeof UserModel) {}
-  @Post("login")
-  @Post("login")
-  async login(@Body() body: any) {
+
+  async login(body: any) {
     const { password, email } = body;
 
     const user = await this.usermodel.findOne({ email });
@@ -25,7 +22,6 @@ export class AuthenController {
         "Mật khẩu không chính xác, vui lòng nhập lại"
       );
     }
-
     const { password: _, ...payload } = user.toObject();
 
     const access_Token = jwt.sign(payload, JWT_SECRET!, { expiresIn: "15m" });

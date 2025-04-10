@@ -5,13 +5,13 @@ import { BaseResponseFormatter } from "./middleware/response-formatter.middlewar
 import { NotFoundMiddleware } from "./middleware/404-handler.middleware";
 import { routeRegister } from "./routes/register-route";
 import { combinePaths } from "./utils/common";
-import express, { Application, NextFunction } from "express";
+import express, { Application, NextFunction, Response } from "express";
+import { Request } from "./utils/types";
 import {
   Constructor,
   MiddlewareFunction,
   TMiddlewareItem,
 } from "./utils/types";
-import { AppService } from "./app/app.service";
 
 export interface TAppManager {
   controllers?: Constructor<any>[];
@@ -41,9 +41,8 @@ export default class AppManager {
   }: TAppManager) {
     this.controllers = controllers ?? [];
     this.container = new Container();
-    this.container.register(AppService);
-    this.app = this.container.get<AppService>(AppService).getInstance();
     this.middlewares = middlewares ?? [];
+    this.app = express();
     this.interceptors = interceptors ?? [];
     this.prefix = combinePaths(...(prefix ?? []));
     this.guards = guards ?? [];
@@ -57,36 +56,44 @@ export default class AppManager {
     );
     this.RtRegister();
     this.applyMiddlewares(NotFoundMiddleware);
-    this.applyMiddlewares(...this.middlewares);
-    this.applyMiddlewares(...this.middlewares);
-    this.applyMiddlewares(...this.guards);
-    this.applyMiddlewares(...this.interceptors);
-    this.applyMiddlewares(ExecuteHandlerMiddleware);
-    this.applyMiddlewares(BaseResponseFormatter);
-    this.applyErrorMiddlewares(ErrorHandlerMiddleware);
-    // this.applyMiddlewares(ErrorHandlerMiddleware);
     return this.app;
   }
 
-  applyErrorMiddlewares(...middlewares: TMiddleware) {
+  getMiddleware(...middlewares: TMiddleware) {
     if (middlewares && middlewares.length > 0) {
-      middlewares.forEach((middleware) => {
-        middleware = middleware as Constructor<any>;
-        new middleware();
-        this.container.register(middleware);
-        const instance = this.container.get(middleware);
-
-        this.app.use(((
-          error: any,
-          req: Request,
-          res: Response,
-          next: NextFunction
-        ) => {
-          instance.use(error, req, res, next);
-        }) as any);
+      return middlewares.map((middleware) => {
+        if (
+          typeof middleware === "object" &&
+          "forRoutes" in middleware &&
+          "useClass" in middleware
+        ) {
+          this.container.register(middleware.useClass);
+          const instance = this.container.get(middleware.useClass);
+          return (req: Request, res: Response, next: NextFunction) => {
+            middleware.forRoutes.forEach((route) => {
+              const path = combinePaths(this.prefix, route);
+              if (req.route.path.startsWith(path)) {
+                instance.use(req, res, next);
+              } else {
+                next();
+              }
+            });
+          };
+        } else {
+          try {
+            new (middleware as Constructor<any>)();
+            this.container.register(middleware as Constructor<any>);
+            const instance = this.container.get(middleware as Constructor<any>);
+            return instance.use.bind(instance);
+          } catch (error) {
+            return middleware;
+          }
+        }
       });
     }
+    return [];
   }
+
   DIregister() {
     this.instances = this.controllers.map((controller) => {
       this.container.register(controller);
@@ -100,7 +107,17 @@ export default class AppManager {
         const path = combinePaths(this.prefix, router.path);
         this.app[router.method.toLowerCase() as keyof Application](
           path,
-          router.middleware
+          router.middleware,
+          this.getMiddleware(...this.middlewares),
+          this.getMiddleware(...this.guards),
+          this.getMiddleware(ExecuteHandlerMiddleware),
+          this.getMiddleware(...this.interceptors),
+          this.getMiddleware(BaseResponseFormatter),
+          (error: any, req: Request, res: Response, next: NextFunction) => {
+            this.container.register(ErrorHandlerMiddleware);
+            const instance = this.container.get(ErrorHandlerMiddleware);
+            instance.use(error, req, res, next);
+          }
         );
         console.log(`✅ Đăng ký route  thành công ${router.method} ${path}`);
       });

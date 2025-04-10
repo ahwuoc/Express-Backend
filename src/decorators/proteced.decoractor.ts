@@ -1,5 +1,6 @@
 import { setMetadata } from "../core/metedata/metadata";
-import { PROTECTED_METADATA_KEY } from "../utils/constant";
+import { METADATA_KEYS } from "../core/utils/constant";
 
 export const Protected = (): ClassDecorator & MethodDecorator =>
-  setMetadata(PROTECTED_METADATA_KEY, true) as ClassDecorator & MethodDecorator;
+  setMetadata(METADATA_KEYS.protected_metadata_key, true) as ClassDecorator &
+    MethodDecorator;

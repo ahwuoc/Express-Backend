@@ -19,3 +19,13 @@ export class ForbiddenException extends Error {
     this.message = "Forbidden";
   }
 }
+
+export class UnAuthorizedException extends Error {
+  statusCode: number;
+  message: string;
+  constructor() {
+    super();
+    this.statusCode = 401;
+    this.message = "UnAuthorized";
+  }
+}
