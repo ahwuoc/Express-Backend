@@ -191,21 +191,23 @@ export default class AppManager {
           origin: "*",
         },
       });
+
       const namespace = ioSocket.of(gatewayOption.namespace ?? "/");
       namespace.use((socket: Socket, next: any) => {
         if (typeof instance.handleHandshake === "function") {
-          const isAuthenticted = instance.handleHandshake(socket);
-          if (!isAuthenticted) {
+          const isAuthenticated = instance.handleHandshake(socket);
+          if (!isAuthenticated) {
             return next(new UnAuthorizedException());
           }
           return next();
-        } else {
-          return next();
-        }
+        } else return next();
       });
       const methods = Object.getOwnPropertyNames(
         Object.getPrototypeOf(instance)
-      ).filter((method) => !defaultMethods.includes(method));
+      ).filter(
+        (method) =>
+          !defaultMethods.includes(method) && method !== "handleHandshake"
+      );
       namespace.on("connection", (socket) => {
         methods.forEach((method) => {
           const message = getMetadata(
@@ -222,6 +224,7 @@ export default class AppManager {
       });
     });
   }
+
   use(path: string = "/", middleware: MiddlewareFunction) {
     this.app.use(path, middleware);
   }

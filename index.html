@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+
+    <button onclick="send()">Test</button>
+    
+
+</body>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+  const socket = io("http://localhost:3001/chat");
+
+  socket.on("connect", () => {
+    console.log("✅ Connected to /chat with ID:", socket.id);
+  });
+
+  socket.on("traloi", (data) => {
+    console.log("📩 Received from server:", data);
+  });
+
+  function send() {
+    socket.emit("message", "Hello từ client 👋");
+  }
+</script>
+
+</html>
