@@ -24,7 +24,7 @@ class userControler {
   }
 
   @Get("/test")
-  chaoem() {
+  chaoem(@Body() body:any) {
     return "co quyen truy cap";
   }
   @Get(":id")

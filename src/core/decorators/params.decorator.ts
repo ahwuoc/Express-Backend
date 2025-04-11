@@ -3,7 +3,7 @@ import { setMetadata } from "../metedata/metadata";
 import { METADATA_KEYS } from "../utils/constant";
 import type { Response, NextFunction } from "express";
 import { Request } from "../utils/types";
-// Inject 1 giá trị cụ thể
+
 export const Inject = (value: any): ParameterDecorator =>
   setMetadata(METADATA_KEYS.param_metadata_key, value) as ParameterDecorator;
 
