@@ -9,7 +9,7 @@ Một hệ thống backend xây dựng trên nền **Express** sử dụng **Typ
 - [🔧 Tính năng](#-tính-năng)
 - [💡 Yêu cầu](#-yêu-cầu)
 - [📦 Cài đặt](#-cài-đặt)
-- [🚀 Hướng dẫn sử dụng](#hướng-dẫn-sử-dụng)
+- [🚀 Hướng dẫn sử dụng](#-hướng-dẫn-sử-dụng)
 
 ---
 
@@ -40,65 +40,60 @@ cd <project-folder>
 npm install
 # hoặc dùng pnpm
 pnpm install
-🚀 Hướng dẫn sử dụng
-Một số decorator phổ biến:
+# 🚀 Hướng dẫn sử dụng
 
-@Controller() – định nghĩa controller
+## Các Decorator phổ biến:
 
-@Injectable() – đánh dấu service có thể inject
+- `@Controller()` – Định nghĩa controller
+- `@Injectable()` – Đánh dấu service có thể inject
+- `@Get()`, `@Post()` – Định nghĩa HTTP method
+- `@Inject()` – Inject thủ công nếu cần
+- `@Param()`, `@Body()` – Lấy dữ liệu từ request
+- `@Req()`, `@Res()` – Truy cập request/response
+- `@UsePipes()` – Gắn middleware validation
 
-@Get(), @Post()   – định nghĩa method
+<details> 
+  <summary>📖 Xem chi tiết hướng dẫn</summary>
+  ### 🧩 Các Decorator hỗ trợ
 
-@Param(), @Body() – lấy dữ liệu từ request
-
-<details> <summary>📖 Xem chi tiết hướng dẫn</summary>
-🧩 Các decorator hỗ trợ
-📁 Controller & Gateway
-@Controller()
-
-@Controller("users") – định nghĩa route base
-
-@SocketGateway({ namespace: "/chat", port: 3002 }) – cho socket server riêng
-
-🧪 Service & Inject
-@Injectable() – dùng cho service (cho phép inject)
-
-@Inject(UserService) – inject thủ công nếu cần
-
-@Injectable()
-export class UserService {
-  getUsers() {
-    return ["user1", "user2"];
+  #### 📁 Controller & Gateway
+  - `@Controller()` - Định nghĩa controller
+  - `@Controller("users")` - Định nghĩa route base
+  - `@SocketGateway({ namespace: "/chat", port: 3002 })` - Định nghĩa socket server riêng
+  
+  #### 🧪 Service & Inject
+  - `@Injectable()` - Dùng cho service, cho phép inject
+  - `@Inject(UserService)` - Inject thủ công nếu cần
+  **Ví dụ về Service & Controller:**
+  @Injectable()
+  export class UserService {
+    getUsers() {
+      return ["user1", "user2"];
+    }
   }
-}
-@Controller("users")
-export class UserController {
-  constructor(
-    @Inject(UserService) private userService: UserService
-  ) {}
 
-  @Get()
-  getAll() {
-    return this.userService.getUsers();
+  @Controller("users")
+  export class UserController {
+    constructor(
+      @Inject(UserService) private userService: UserService
+    ) {}
+
+    @Get()
+    getAll() {
+      return this.userService.getUsers();
+    }
   }
-}
-🌐 Method Decorators (HTTP)
-@Get() – GET method
+ ####🌐 Method Decorators (HTTP)
+@Get() - Định nghĩa method GET
 
-@Post() – POST method
+@Post() - Định nghĩa method POST
 
-@Patch() – PATCH method
+@Patch() - Định nghĩa method PATCH
 
-@Delete() – DELETE method
+@Delete() - Định nghĩa method DELETE
 
-📦 Param & Body
-@Param("id") id: string – lấy params từ URL
-
-@Body() body: any – lấy body từ request
-
-ts
-Sao chép
-Chỉnh sửa
+####📦 Param & Body
+Lấy tham số và dữ liệu body:
 @Get(":id")
 getUser(@Param("id") id: string) {
   return `User ID: ${id}`;
@@ -108,10 +103,10 @@ getUser(@Param("id") id: string) {
 create(@Body() body: any) {
   return `Creating user with data: ${JSON.stringify(body)}`;
 }
-🛠️ Dev command
-bash
-Sao chép
-Chỉnh sửa
-npm run dev   
-npm run build  
-</details> ```
+🛠️ Dev Commands
+Chạy các lệnh phát triển ứng dụng:
+
+--bash
+--npm run dev  
+--npm run build 
+<details> 
