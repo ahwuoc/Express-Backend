@@ -18,7 +18,7 @@ export class JwtStrategy extends Strategy {
         this.validate(payload, done);
       }
     );
-    passportService.getInstance().use(this);
+    passportService.passport.use(this);
   }
   validate(payload: JwtPayload, done: VerifiedCallback) {
     return done(null, payload);

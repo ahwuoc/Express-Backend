@@ -1,19 +1,22 @@
+import { Request } from "express";
 import { Controller } from "../core/decorators/controller.decorator";
 import { Get, Post, Delete, Patch } from "../core/decorators/method.decorator";
-import { Body, Inject, Param } from "../core/decorators/params.decorator";
+import { Body, Inject, Param, Req } from "../core/decorators/params.decorator";
+import { UsePipes } from "../core/decorators/use-pipes.decorator";
+import { CreateDtoUser } from "../dto/user.dto";
+import { ValidationPipe } from "../pipes/validation.pipe";
 import { userService } from "../services/user.service";
 @Controller("users")
 class userControler {
   constructor(@Inject(userService) private useService: userService) {}
-
   @Get()
   get() {
     return this.useService.find();
   }
 
   @Post()
-  add(@Body() body: any) {
-    return this.useService.createUser(body);
+  add(@Body()id: number) {
+    return "dsadsadsad";
   }
   @Post("post/:id")
   test23() {
@@ -33,8 +36,9 @@ class userControler {
     return this.useService.delete(id);
   }
 
-  onInit() {
-    return console.log("Test init controller");
+  @Post("/test/validation")
+  testvalidation(@Body() body: CreateDtoUser, @Req() req: Request) {
+    return "test";
   }
 }
 export default userControler;

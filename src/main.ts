@@ -12,7 +12,8 @@ import path from "path";
 import express from "express";
 import { ChatController } from "./controller/chatController";
 import { BaseResponseFormatter } from "./interceptors/response-formatter.interceptor";
-import { BodyValidateInterceptor } from "./interceptors/body-validate.intercept";
+import { BodyValidateInterceptor } from "./interceptors/body-validate.interceptor";
+import { ValidationPipe } from "./pipes/validation.pipe";
 
 dotenv.config();
 const PORT = 3000;
@@ -31,13 +32,25 @@ const App = new AppManager({
       useClass: SingleFileUploadMiddleware,
     },
   ],
-  guards: [AuthGuard],
+  guards: [
+    {
+      forRoutes: ["/test"],
+      useClass: AuthGuard,
+    },
+  ],
   interceptors: [
     {
       forRoutes: ["/users", "/test"],
       useClass: BaseResponseFormatter,
     },
     BodyValidateInterceptor,
+  ],
+  pipes: [
+    {
+      forRoutes: ["/users"],
+      useClass: ValidationPipe,
+    },
+    // ValidationPipe,
   ],
 });
 

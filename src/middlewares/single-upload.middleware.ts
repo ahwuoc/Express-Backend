@@ -16,7 +16,4 @@ export class SingleFileUploadMiddleware implements AppMiddleware {
       next();
     });
   }
-  onInit() {
-    return console.log("Test init middleware");
-  }
 }

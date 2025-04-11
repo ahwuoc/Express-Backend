@@ -14,6 +14,9 @@
     "@types/node": "^22.14.0",
     "body-parser": "^2.2.0",
     "chalk": "^5.4.1",
+    "class-transformer": "^0.5.1",
+    "class-transformer-validator": "^0.9.1",
+    "class-validator": "^0.14.1",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "express-list-endpoints": "^7.1.1",
@@ -28,6 +31,7 @@
     "routing-controllers": "^0.11.2",
     "rxjs": "^7.8.2",
     "socket.io": "^4.8.1",
+    "transform": "^1.1.2",
     "typescript": "^5.8.2"
   },
   "devDependencies": {

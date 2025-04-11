@@ -1,10 +1,7 @@
-import Injectable from "../core/decorators/InjecTable.decorator";
 import passport from "passport";
+import Injectable from "../core/decorators/InjecTable.decorator";
+
 @Injectable()
 export class PassportService {
-  private passport: passport.PassportStatic = passport;
-
-  getInstance() {
-    return this.passport;
-  }
+  passport = passport;
 }

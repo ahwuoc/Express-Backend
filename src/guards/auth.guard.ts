@@ -19,7 +19,7 @@ export default class AuthGuard extends AppGuard {
     super();
   }
   canActive(context: AppContext): boolean | Promise<boolean> {
-    const passport = this.passportServie.getInstance();
+    const passport = this.passportServie.passport;
     const controllerClass = context.getClass();
     const handler = context.getHandler();
     const req = context.switchToHtppRequest();

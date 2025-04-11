@@ -2,6 +2,8 @@ import { METADATA_KEYS } from "../utils/constant";
 import { getMetadata, setMetadata } from "../metedata/metadata";
 import { Constructor } from "../utils/types";
 import { defaultMethods } from "../utils/common";
+import { NextFunction } from "express";
+import { BadRequestException } from "../base/error.base";
 
 export class Container {
   services = new Map<string, Constructor<any>>();
@@ -52,7 +54,12 @@ export class Container {
           Reflect.getMetadata("design:paramtypes", service.prototype, method) ??
           [];
         const originalMethod: Function = service.prototype[method];
-        service.prototype[method] = function (...args: any[]) {
+        const pipe = getMetadata(
+          METADATA_KEYS.use_pipes_metadata_key,
+          service.prototype[method]
+        );
+        let self = this;
+        service.prototype[method] = async function (...args: any[]) {
           const [req, res, next] = args;
           const paramMetadatas: any[] = paramTypes
             .map((paramType: any, index: number) => {
@@ -65,14 +72,21 @@ export class Container {
               return undefined;
             })
             .filter((paramType: any) => paramType !== undefined);
-
-          paramMetadatas.forEach((paramMetadata: any) => {
+          for (const paramMetadata of paramMetadatas) {
+            let result = paramMetadata.value(req, res, next);
+            const index = paramMetadata.index;
+            const paramsType = paramTypes[index];
+            if (pipe) {
+              self.register(pipe);
+              const instancePipe = self.get<any>(pipe);
+              if (typeof instancePipe.transform === "function") {
+                result = await instancePipe.transform(result, paramsType);
+              }
+            }
             args[paramMetadata.index] = paramMetadata.value(req, res, next);
-          });
-
-          return originalMethod.apply(this, args);
+          }
+          return await originalMethod.apply(this, args);
         };
-
         Object.defineProperty(service.prototype[method], "name", {
           value: originalMethod.name,
         });

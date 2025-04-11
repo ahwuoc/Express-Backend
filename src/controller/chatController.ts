@@ -3,8 +3,8 @@ import { SocketGateway } from "../core/decorators/gateway.decorator";
 import { SubscribeMessage } from "../core/decorators/method.decorator";
 import { Socket } from "socket.io";
 import { Inject } from "../core/decorators/params.decorator";
-import UserModel from "../db/model/use.model";
-@SocketGateway({ namespace: "/chat", port: 3001 })
+import UserModel from "../model/use.model";
+@SocketGateway({ namespace: "/chat", port: 3002 })
 export class ChatController implements AppGateway {
   constructor(@Inject(UserModel) private userModel: typeof UserModel) {}
   handleHandshake(socket: Socket): boolean | Promise<boolean> {

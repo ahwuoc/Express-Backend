@@ -15,7 +15,7 @@ import {
 import http from "http";
 import { Server, Socket } from "socket.io";
 import { Constructor, MiddlewareFunction } from "./utils/types";
-import { getMetadata } from "./metedata/metadata";
+import { getMetadata, setMetadata } from "./metedata/metadata";
 import { METADATA_KEYS } from "./utils/constant";
 import { UnAuthorizedException } from "./base/error.base";
 import { NextCallFunction } from "./base/next-call-function.base";
@@ -26,9 +26,11 @@ export interface TAppManager {
   interceptors?: TInterceptor;
   prefix?: string[];
   guards?: TMiddleware;
+  pipes?: TPipes;
 }
 
 export type TInterceptor = (Constructor<any> | MiddlewareForRoute)[];
+export type TPipes = (Constructor<any> | MiddlewareForRoute)[];
 export type TMiddleware = (
   | MiddlewareFunction
   | MiddlewareFunctionError
@@ -47,12 +49,14 @@ export default class AppManager {
   private restfulInstances: any[] = [];
   private gatewayInstances: any[] = [];
   private servers = new Map<number, http.Server>();
+  private pipes: TPipes;
   constructor({
     controllers,
     middlewares,
     interceptors,
     prefix,
     guards,
+    pipes,
   }: TAppManager) {
     this.controllers = controllers ?? [];
     this.container = new Container();
@@ -61,6 +65,7 @@ export default class AppManager {
     this.interceptors = interceptors ?? [];
     this.prefix = combinePaths(...(prefix ?? []));
     this.guards = guards ?? [];
+    this.pipes = pipes ?? [];
   }
 
   public init() {
@@ -68,9 +73,10 @@ export default class AppManager {
       express.json(),
       express.urlencoded({ extended: true })
     );
+    this.useGlobalPipes();
     this.instanceRegister();
     this.RtRegister();
-    // this.applyMiddlewares(NotFoundMiddleware);
+    this.applyMiddlewares(NotFoundMiddleware);
   }
 
   private instanceRegister() {
@@ -119,6 +125,50 @@ export default class AppManager {
     }
     return [];
   }
+  useGlobalPipes() {
+    if (this.pipes && this.pipes.length > 0) {
+      for (const controller of this.controllers) {
+        const controllerPath = getMetadata(
+          METADATA_KEYS.method_metadata_key,
+          controller
+        );
+        if (controllerPath === undefined) {
+          continue;
+        }
+        const methods = Object.getOwnPropertyNames(controller.prototype).filter(
+          (method) => !defaultMethods.includes(method)
+        );
+        methods.forEach((method) => {
+          this.pipes.forEach((pipe) => {
+            if (
+              typeof pipe === "object" &&
+              "forRoutes" in pipe &&
+              "useClass" in pipe
+            ) {
+              const methodMetadata = getMetadata(
+                METADATA_KEYS.method_metadata_key,
+                controller.prototype[method]
+              );
+              const path = combinePaths(controllerPath, methodMetadata.path);
+              pipe.forRoutes.forEach((route) => {
+                if (path.startsWith(route)) {
+                  controller.prototype[method].metadata = {
+                    ...controller.prototype[method].metadata,
+                    [METADATA_KEYS.use_pipes_metadata_key]: pipe.useClass,
+                  };
+                }
+              });
+            } else {
+              controller.prototype[method].metadata = {
+                ...controller.prototype[method].metadata,
+                [METADATA_KEYS.use_pipes_metadata_key]: pipe,
+              };
+            }
+          });
+        });
+      }
+    }
+  }
 
   private DIregister(constructor: Constructor<any>) {
     this.container.register(constructor);
@@ -135,7 +185,7 @@ export default class AppManager {
           this.getMiddleware(...this.middlewares),
           this.getMiddleware(...this.guards),
 
-          (req: Request, res: Response, next: NextFunction) => {
+          async (req: Request, res: Response, next: NextFunction) => {
             const executeHandeleInstance = this.getMiddleware(
               ExecuteHandlerMiddleware
             );
@@ -149,9 +199,8 @@ export default class AppManager {
             const context = new AppContext(req, res, next);
             for (const interceptFunction of interceptFunctions) {
               if (!interceptFunction) continue;
-              instanceNextCallFunction.observable = interceptFunction(
-                context,
-                instanceNextCallFunction
+              instanceNextCallFunction.observable = await Promise.resolve(
+                interceptFunction(context, instanceNextCallFunction)
               );
             }
             instanceNextCallFunction.hanlde().subscribe({
@@ -193,7 +242,6 @@ export default class AppManager {
 
   private applyMiddlewares(...middlewares: TMiddleware) {
     if (!middlewares || middlewares.length === 0) return;
-
     middlewares.forEach((middleware, index) => {
       try {
         if (

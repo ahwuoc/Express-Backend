@@ -4,4 +4,5 @@ export const METADATA_KEYS = {
   protected_metadata_key: "protected-metadata-key",
   socket_gateway_metadata_key: "socket-gateway-metadata-key",
   subscribe_message_metadata_key: "subscribe-message-metadata-key",
+  use_pipes_metadata_key: "use-pipes-metadata-key",
 } as const;

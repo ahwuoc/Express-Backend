@@ -3,7 +3,7 @@ import { BadRequestException } from "../core/base/error.base";
 import { Controller } from "../core/decorators/controller.decorator";
 import { Post } from "../core/decorators/method.decorator";
 import { Body, Inject } from "../core/decorators/params.decorator";
-import UserModel from "../db/model/use.model";
+import UserModel from "../model/use.model";
 import { AuthenService } from "../services/authen.service";
 
 @Controller()
