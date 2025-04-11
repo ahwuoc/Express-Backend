@@ -11,10 +11,12 @@ import { SingleFileUploadMiddleware } from "./middlewares/single-upload.middlewa
 import path from "path";
 import express from "express";
 import { ChatController } from "./controller/chatController";
+import { BaseResponseFormatter } from "./interceptors/response-formatter.interceptor";
+import { BodyValidateInterceptor } from "./interceptors/body-validate.intercept";
 
 dotenv.config();
 const PORT = 3000;
-const appManager = new AppManager({
+const App = new AppManager({
   controllers: [
     userControler,
     categoryController,
@@ -30,13 +32,20 @@ const appManager = new AppManager({
     },
   ],
   guards: [AuthGuard],
+  interceptors: [
+    {
+      forRoutes: ["/users", "/test"],
+      useClass: BaseResponseFormatter,
+    },
+    BodyValidateInterceptor,
+  ],
 });
 
 (async () => {
   await connectMongo();
-  const app = appManager.init();
-  app.use("/static", express.static(path.resolve("./uploads")));
-  app.listen(PORT, () => {
+  App.use("/static", express.static(path.resolve("./uploads")));
+  App.init();
+  App.listen(PORT, () => {
     console.log(`🌟 Server running at http://localhost:${PORT}`);
   });
 })();

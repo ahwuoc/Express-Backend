@@ -2,8 +2,6 @@ import { Controller } from "../core/decorators/controller.decorator";
 import { Get, Post, Delete, Patch } from "../core/decorators/method.decorator";
 import { Body, Inject, Param } from "../core/decorators/params.decorator";
 import { userService } from "../services/user.service";
-import { Protected } from "../decorators/proteced.decoractor";
-
 @Controller("users")
 class userControler {
   constructor(@Inject(userService) private useService: userService) {}
@@ -26,8 +24,6 @@ class userControler {
   chaoem() {
     return "co quyen truy cap";
   }
-
-  @Protected()
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.useService.findOne(id);
@@ -37,7 +33,6 @@ class userControler {
     return this.useService.delete(id);
   }
 
-  // hàm chạy default
   onInit() {
     return console.log("Test init controller");
   }

@@ -12,7 +12,6 @@ export class ChatController implements AppGateway {
   }
   @SubscribeMessage("message")
   async handleMessage(socket: Socket, message: string) {
-    console.log(message);
     const users = await this.userModel.find().lean();
     socket.emit("traloi", users);
   }

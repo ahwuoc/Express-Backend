@@ -57,9 +57,3 @@ export type MiddlewareForRoute = {
   forRoutes: string[];
   useClass: MiddlewareClass;
 };
-
-export type TMiddlewareItem =
-  | MiddlewareFunction
-  | MiddlewareFunctionError
-  | MiddlewareClass
-  | MiddlewareForRoute;

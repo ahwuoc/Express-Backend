@@ -1,38 +1,47 @@
 import { Container } from "./dependency-manager/container.di";
 import ExecuteHandlerMiddleware from "./middleware/execute-handler.middleware";
 import ErrorHandlerMiddleware from "./middleware/error-handler.middleware";
-import { BaseResponseFormatter } from "./middleware/response-formatter.middleware";
 import { NotFoundMiddleware } from "./middleware/404-handler.middleware";
 import { routeRegister } from "./routes/register-route";
 import { combinePaths, defaultMethods } from "./utils/common";
 import express, { Application, NextFunction, Response } from "express";
-import { Request, TGateway } from "./utils/types";
+import {
+  MiddlewareClass,
+  MiddlewareForRoute,
+  MiddlewareFunctionError,
+  Request,
+  TGateway,
+} from "./utils/types";
 import http from "http";
 import { Server, Socket } from "socket.io";
-import {
-  Constructor,
-  MiddlewareFunction,
-  TMiddlewareItem,
-} from "./utils/types";
+import { Constructor, MiddlewareFunction } from "./utils/types";
 import { getMetadata } from "./metedata/metadata";
 import { METADATA_KEYS } from "./utils/constant";
 import { UnAuthorizedException } from "./base/error.base";
+import { NextCallFunction } from "./base/next-call-function.base";
+import { AppContext } from "./base/context.base";
 export interface TAppManager {
   controllers?: Constructor<any>[];
   middlewares?: any[];
-  interceptors?: TMiddleware;
+  interceptors?: TInterceptor;
   prefix?: string[];
   guards?: TMiddleware;
 }
 
-export type TMiddleware = TMiddlewareItem[];
+export type TInterceptor = (Constructor<any> | MiddlewareForRoute)[];
+export type TMiddleware = (
+  | MiddlewareFunction
+  | MiddlewareFunctionError
+  | MiddlewareClass
+  | MiddlewareForRoute
+)[];
 
 export default class AppManager {
   private controllers: Constructor<any>[];
   private app: Application;
   private container: Container;
   private middlewares: TMiddleware;
-  private interceptors: TMiddleware;
+  private interceptors: TInterceptor;
   private prefix: string;
   private guards: TMiddleware;
   private restfulInstances: any[] = [];
@@ -54,18 +63,17 @@ export default class AppManager {
     this.guards = guards ?? [];
   }
 
-  init() {
+  public init() {
     this.applyMiddlewares(
       express.json(),
       express.urlencoded({ extended: true })
     );
     this.instanceRegister();
     this.RtRegister();
-    this.applyMiddlewares(NotFoundMiddleware);
-    return this;
+    // this.applyMiddlewares(NotFoundMiddleware);
   }
 
-  instanceRegister() {
+  private instanceRegister() {
     this.controllers.map((controller) => {
       const controllerPath = getMetadata(
         METADATA_KEYS.method_metadata_key,
@@ -79,7 +87,7 @@ export default class AppManager {
       }
     });
   }
-  getMiddleware(...middlewares: TMiddleware) {
+  private getMiddleware(...middlewares: TMiddleware) {
     if (middlewares && middlewares.length > 0) {
       return middlewares.map((middleware) => {
         if (
@@ -112,11 +120,11 @@ export default class AppManager {
     return [];
   }
 
-  DIregister(constructor: Constructor<any>) {
+  private DIregister(constructor: Constructor<any>) {
     this.container.register(constructor);
     return this.container.get(constructor);
   }
-  RtRegister() {
+  private RtRegister() {
     this.restfulInstances.forEach((instance: any) => {
       const routers = routeRegister(instance);
       routers.forEach((router) => {
@@ -126,9 +134,31 @@ export default class AppManager {
           router.middleware,
           this.getMiddleware(...this.middlewares),
           this.getMiddleware(...this.guards),
-          this.getMiddleware(ExecuteHandlerMiddleware),
-          this.getMiddleware(...this.interceptors),
-          this.getMiddleware(BaseResponseFormatter),
+
+          (req: Request, res: Response, next: NextFunction) => {
+            const executeHandeleInstance = this.getMiddleware(
+              ExecuteHandlerMiddleware
+            );
+            const instanceNextCallFunction = new NextCallFunction(
+              req,
+              res,
+              next,
+              ...executeHandeleInstance
+            );
+            const interceptFunctions = this.getInterceptors(req);
+            const context = new AppContext(req, res, next);
+            for (const interceptFunction of interceptFunctions) {
+              if (!interceptFunction) continue;
+              instanceNextCallFunction.observable = interceptFunction(
+                context,
+                instanceNextCallFunction
+              );
+            }
+            instanceNextCallFunction.hanlde().subscribe({
+              next: (data) => res.send(data),
+              error: (error) => next(error),
+            });
+          },
           (error: any, req: Request, res: Response, next: NextFunction) => {
             const instance = this.DIregister(ErrorHandlerMiddleware);
             instance.use(error, req, res, next);
@@ -139,7 +169,29 @@ export default class AppManager {
     });
   }
 
-  applyMiddlewares(...middlewares: TMiddleware) {
+  private getInterceptors(req: Request) {
+    return this.interceptors.flatMap((interceptor) => {
+      if (
+        typeof interceptor === "object" &&
+        "forRoutes" in interceptor &&
+        "useClass" in interceptor
+      ) {
+        const instance = this.DIregister(interceptor.useClass);
+        return interceptor.forRoutes.map((route) => {
+          const path = combinePaths(this.prefix, route);
+          if (req.route.path.startsWith(path)) {
+            return instance.intercept.bind(instance);
+          }
+          return undefined;
+        });
+      } else {
+        const instance = this.DIregister(interceptor);
+        return instance.intercept.bind(instance);
+      }
+    });
+  }
+
+  private applyMiddlewares(...middlewares: TMiddleware) {
     if (!middlewares || middlewares.length === 0) return;
 
     middlewares.forEach((middleware, index) => {
@@ -168,7 +220,7 @@ export default class AppManager {
       }
     });
   }
-  GatewayRegister(port: number) {
+  private GatewayRegister(port: number) {
     this.gatewayInstances.forEach((instance) => {
       const gatewayOption: TGateway = getMetadata(
         METADATA_KEYS.socket_gateway_metadata_key,
@@ -225,10 +277,10 @@ export default class AppManager {
     });
   }
 
-  use(path: string = "/", middleware: MiddlewareFunction) {
+  public use(path: string = "/", middleware: MiddlewareFunction) {
     this.app.use(path, middleware);
   }
-  listen(port: number, callback: () => void) {
+  public listen(port: number, callback: () => void) {
     const server = http.createServer(this.app);
     this.servers.set(port, server);
     this.app.listen(port, callback);
