@@ -1,6 +1,16 @@
-<!-- # 🚀 Express DI Decorator Framework
+# 🚀 Express DI Decorator Framework
 
 Một hệ thống backend xây dựng trên nền **Express** sử dụng **TypeScript**, kết hợp **Dependency Injection** và **Decorator** để tạo kiến trúc sạch, dễ mở rộng.
+
+---
+
+## 📚 Mục lục
+
+- [🔧 Tính năng](#-tính-năng)
+- [💡 Yêu cầu](#-yêu-cầu)
+- [📦 Cài đặt](#-cài-đặt)
+- [🧠 Giới thiệu](#giới-thiệu)
+- [🚀 Hướng dẫn sử dụng](#hướng-dẫn-sử-dụng)
 
 ---
 
@@ -16,7 +26,7 @@ Một hệ thống backend xây dựng trên nền **Express** sử dụng **Typ
 ## 💡 Yêu cầu
 
 - Node.js >= 18  
-- TypeScript >= 5.0
+- TypeScript >= 5.0  
 
 ---
 
@@ -30,18 +40,4 @@ cd <project-folder>
 # Cài dependencies
 npm install
 # hoặc dùng pnpm
-pnpm install -->
-
-<details>
-<summary>Giới thiệu</summary>
-
-Đây là phần giới thiệu dài dòng bla bla...
-
-</details>
-
-<details>
-<summary>Hướng dẫn sử dụng</summary>
-
-Cài bằng `npm install`, sau đó `npm run dev`...
-
-</details>
+pnpm install
