@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { Controller } from "../core/decorators/controller.decorator";
-import { Get, Post, Delete, Patch } from "../core/decorators/method.decorator";
+import { Get, Post, DeleteTest, Patch } from "../core/decorators/method.decorator";
 import { Body, Inject, Param, Req } from "../core/decorators/params.decorator";
 import { UsePipes } from "../core/decorators/use-pipes.decorator";
 import { CreateDtoUser } from "../dto/user.dto";
@@ -31,7 +31,7 @@ class userControler {
   findOne(@Param("id") id: string) {
     return this.useService.findOne(id);
   }
-  @Delete(":id")
+  @DeleteTest(":id")
   delete(@Param("id") id: string) {
     return this.useService.delete(id);
   }

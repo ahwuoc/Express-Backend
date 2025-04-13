@@ -40,13 +40,9 @@ cd <project-folder>
 npm install
 # hoặc dùng pnpm
 pnpm install
-```
+# 🚀 Hướng dẫn sử dụng
 
----
-
-## 🚀 Hướng dẫn sử dụng
-
-### Các Decorator phổ biến:
+## Các Decorator phổ biến:
 
 - `@Controller()` – Định nghĩa controller
 - `@Injectable()` – Đánh dấu service có thể inject
@@ -58,55 +54,46 @@ pnpm install
 
 <details> 
   <summary>📖 Xem chi tiết hướng dẫn</summary>
+  ### 🧩 Các Decorator hỗ trợ
 
-### 🧩 Các Decorator hỗ trợ
-
-#### 📁 Controller & Gateway
-
-- `@Controller()` - Định nghĩa controller
-- `@Controller("users")` - Định nghĩa route base
-- `@SocketGateway({ namespace: "/chat", port: 3002 })` - Định nghĩa socket server riêng
-
-#### 🧪 Service & Inject
-
-- `@Injectable()` - Dùng cho service, cho phép inject
-- `@Inject(UserService)` - Inject thủ công nếu cần
-
-**Ví dụ về Service & Controller:**
-
-```typescript
-@Injectable()
-export class UserService {
-  getUsers() {
-    return ["user1", "user2"];
+  #### 📁 Controller & Gateway
+  - `@Controller()` - Định nghĩa controller
+  - `@Controller("users")` - Định nghĩa route base
+  - `@SocketGateway({ namespace: "/chat", port: 3002 })` - Định nghĩa socket server riêng
+  
+  #### 🧪 Service & Inject
+  - `@Injectable()` - Dùng cho service, cho phép inject
+  - `@Inject(UserService)` - Inject thủ công nếu cần
+  **Ví dụ về Service & Controller:**
+  @Injectable()
+  export class UserService {
+    getUsers() {
+      return ["user1", "user2"];
+    }
   }
-}
 
-@Controller("users")
-export class UserController {
-  constructor(
-    @Inject(UserService) private userService: UserService
-  ) {}
+  @Controller("users")
+  export class UserController {
+    constructor(
+      @Inject(UserService) private userService: UserService
+    ) {}
 
-  @Get()
-  getAll() {
-    return this.userService.getUsers();
+    @Get()
+    getAll() {
+      return this.userService.getUsers();
+    }
   }
-}
-```
+ ####🌐 Method Decorators (HTTP)
+@Get() - Định nghĩa method GET
 
-#### 🌐 Method Decorators (HTTP)
+@Post() - Định nghĩa method POST
 
-- `@Get()` - Định nghĩa method GET
-- `@Post()` - Định nghĩa method POST
-- `@Patch()` - Định nghĩa method PATCH
-- `@Delete()` - Định nghĩa method DELETE
+@Patch() - Định nghĩa method PATCH
 
-#### 📦 Param & Body
+@Delete() - Định nghĩa method DELETE
 
+####📦 Param & Body
 Lấy tham số và dữ liệu body:
-
-```typescript
 @Get(":id")
 getUser(@Param("id") id: string) {
   return `User ID: ${id}`;
@@ -116,17 +103,10 @@ getUser(@Param("id") id: string) {
 create(@Body() body: any) {
   return `Creating user with data: ${JSON.stringify(body)}`;
 }
-```
-
-</details>
-
----
-
-## 🛠️ Dev Commands
-
+🛠️ Dev Commands
 Chạy các lệnh phát triển ứng dụng:
 
-```bash
-npm run dev  
-npm run build
-```
+--bash
+--npm run dev  
+--npm run build 
+<details> 

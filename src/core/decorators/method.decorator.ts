@@ -12,7 +12,7 @@ function createMethod(method: Method) {
 
 export const Get = createMethod(Method.GET);
 export const Post = createMethod(Method.POST);
-export const Delete = createMethod(Method.DELETE);
+export const DeleteTest = createMethod(Method.DELETE);
 export const Patch = createMethod(Method.PATCH);
 
 export const SubscribeMessage = (message: string): MethodDecorator =>
