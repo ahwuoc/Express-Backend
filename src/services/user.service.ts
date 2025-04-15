@@ -3,7 +3,7 @@ import Injectable from "../core/decorators/InjecTable.decorator";
 import { Inject } from "../core/decorators/params.decorator";
 import { BadRequestException } from "../core/base/error.base";
 @Injectable()
-export class userService {
+export default class userService {
   constructor(@Inject(UserModel) private userModel: typeof UserModel) {}
 
   async createUser(body: any) {
@@ -29,9 +29,5 @@ export class userService {
     } catch (error) {
       throw new BadRequestException("ID không hợp lệ hoặc user không tồn tại");
     }
-  }
-  // hàm chạy default
-  onInit() {
-    return console.log("Test init services");
   }
 }

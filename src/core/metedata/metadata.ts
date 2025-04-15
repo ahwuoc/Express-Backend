@@ -2,7 +2,7 @@ import { MetadataStorage, MethodWithMetadata } from "../utils/types";
 export function setMetadata(
   key: string | symbol,
   value: any
-): ClassDecorator | MethodDecorator | ParameterDecorator {
+): ClassDecorator & MethodDecorator & ParameterDecorator {
   return function (
     target: MetadataStorage,
     propertyKey?: string | symbol,

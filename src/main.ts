@@ -1,30 +1,19 @@
 import "reflect-metadata";
 import AppManager from "./core/App.Manager";
-import userControler from "./controller/userController";
 import connectMongo from "./db/connect.db";
 import AuthGuard from "./guards/auth.guard";
-import { categoryController } from "./controller/categoryController";
-import { AuthenController } from "./controller/authenController";
 import dotenv from "dotenv";
-import { UploadController } from "./controller/uploadController";
 import { SingleFileUploadMiddleware } from "./middlewares/single-upload.middleware";
 import path from "path";
 import express from "express";
-import { ChatController } from "./controller/chatController";
 import { BaseResponseFormatter } from "./interceptors/response-formatter.interceptor";
 import { BodyValidateInterceptor } from "./interceptors/body-validate.interceptor";
 import { ValidationPipe } from "./pipes/validation.pipe";
-
+import useController from "@/controllers/user.controller";
 dotenv.config();
 const PORT = 3000;
 const App = new AppManager({
-  controllers: [
-    userControler,
-    categoryController,
-    AuthenController,
-    UploadController,
-    ChatController,
-  ],
+  controllers: [useController],
   prefix: ["api"],
   middlewares: [
     {
@@ -34,28 +23,16 @@ const App = new AppManager({
   ],
   guards: [
     {
-      forRoutes: ["/test"],
+      forRoutes: ["/users"],
       useClass: AuthGuard,
     },
   ],
-  interceptors: [
-    {
-      forRoutes: ["/users", "/test"],
-      useClass: BaseResponseFormatter,
-    },
-    BodyValidateInterceptor,
-  ],
-  pipes: [
-    {
-      forRoutes: ["/users"],
-      useClass: ValidationPipe,
-    },
-    // ValidationPipe,
-  ],
+  interceptors: [BaseResponseFormatter],
+  pipes: [ValidationPipe],
 });
 
 (async () => {
-  await connectMongo();
+  // await connectMongo();
   App.use("/static", express.static(path.resolve("./uploads")));
   App.init();
   App.listen(PORT, () => {

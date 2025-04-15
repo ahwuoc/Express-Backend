@@ -42,6 +42,10 @@ npm install
 pnpm install
 # 🚀 Hướng dẫn sử dụng
 
+
+## Các lênh  phổ biến:
+npm run make:controller name : lệnh tạo controller
+npm run make:gateway name : lệnh tạo socket
 ## Các Decorator phổ biến:
 
 - `@Controller()` – Định nghĩa controller

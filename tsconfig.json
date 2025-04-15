@@ -10,7 +10,18 @@
     "rootDir": "./src",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "baseUrl": ".", 
+    "paths": {
+      "@/*": ["src/*"], 
+      "@/decorators/*": ["src/core/decorators/*"],
+      "@/controllers/*": ["src/controllers/*"],
+      "@/services/*": ["src/services/*"]
+    }
   },
-  "include": ["src/**/*.ts", "src/services/user.service.ts", "src/core/base/error-middleware.base.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/services/user.service.ts",
+    "src/core/base/error-middleware.base.ts"
+  ],
   "exclude": ["node_modules"]
 }
