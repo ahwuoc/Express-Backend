@@ -16,11 +16,8 @@ const importDynamic = () => {
         (file) =>
           file.endsWith(".controller.ts") || file.endsWith(".gateway.ts")
       );
-
     files.forEach((file) => {
       const filePath = path.resolve(dir, file);
-      console.log(`🔗 Đang import: ${filePath}`);
-
       try {
         const module = require(filePath);
         const mod = module.default || module;
@@ -33,5 +30,4 @@ const importDynamic = () => {
 
   return allModules;
 };
-
 export default importDynamic;

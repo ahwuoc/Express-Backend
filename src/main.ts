@@ -10,7 +10,6 @@ import importDynamic from "./utils/importControllers";
 dotenv.config();
 const PORT = 3000;
 const App = new AppManager({
-  controllers: importDynamic(),
   prefix: ["api"],
   middlewares: [
     {
@@ -30,9 +29,6 @@ const App = new AppManager({
 
 (async () => {
   await connectMongo();
-  App.pathStatic("/public", "./uploads");
-  App.init();
-  App.listen(PORT, () => {
-    console.log(`🌟 Server running at http://localhost:${PORT}`);
-  });
+  App.pathStatic("/public", "/public");
+  App.listen(PORT);
 })();

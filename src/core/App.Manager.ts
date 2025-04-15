@@ -21,6 +21,7 @@ import { METADATA_KEYS } from "./utils/constant";
 import { UnAuthorizedException } from "./base/error.base";
 import { NextCallFunction } from "./base/next-call-function.base";
 import { AppContext } from "./base/context.base";
+import importDynamic from "../utils/importControllers";
 export interface TAppManager {
   controllers?: Constructor<any>[];
   middlewares?: any[];
@@ -59,7 +60,7 @@ export default class AppManager {
     guards,
     pipes,
   }: TAppManager) {
-    this.controllers = controllers ?? [];
+    this.controllers = importDynamic() ?? [];
     this.container = new Container();
     this.middlewares = middlewares ?? [];
     this.app = express();
@@ -217,7 +218,9 @@ export default class AppManager {
             instance.use(error, req, res, next);
           }
         );
-        console.log(`🗸 Đăng ký route thành công ${router.method} ${path}`);
+        console.log(
+          `\x1b[32m🗸 Đăng ký route thành công [\x1b[33m${router.method}\x1b[32m] \x1b[34m${path}\x1b[0m`
+        );
       });
     });
   }
@@ -332,10 +335,15 @@ export default class AppManager {
   public use(path: string = "/", middleware: MiddlewareFunction) {
     this.app.use(path, middleware);
   }
-  public listen(port: number, callback: () => void) {
+  public listen(port: number) {
+    this.init();
     const server = http.createServer(this.app);
     this.servers.set(port, server);
-    this.app.listen(port, callback);
+    this.app.listen(port, () => {
+      console.log(
+        `🌟 Server running at \x1b[36mhttp://localhost:${port}\x1b[0m`
+      );
+    });
     this.GatewayRegister(port);
   }
 }
