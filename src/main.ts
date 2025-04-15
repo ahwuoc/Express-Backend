@@ -7,13 +7,12 @@ import { SingleFileUploadMiddleware } from "./middlewares/single-upload.middlewa
 import path from "path";
 import express from "express";
 import { BaseResponseFormatter } from "./interceptors/response-formatter.interceptor";
-import { BodyValidateInterceptor } from "./interceptors/body-validate.interceptor";
 import { ValidationPipe } from "./pipes/validation.pipe";
-import useController from "@/controllers/user.controller";
+import importDynamic from "./utils/importControllers";
 dotenv.config();
 const PORT = 3000;
 const App = new AppManager({
-  controllers: [useController],
+  controllers: importDynamic(),
   prefix: ["api"],
   middlewares: [
     {

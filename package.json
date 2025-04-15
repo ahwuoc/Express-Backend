@@ -6,7 +6,8 @@
     "build": "tsc",
     "dev": "nodemon -q",
     "make:controller": "ts-node ./src/cli/make-controller.ts",
-    "make:gateway": "ts-node ./src/cli/make-gateway.ts"
+    "make:gateway": "ts-node ./src/cli/make-gateway.ts",
+    "make:service": "ts-node ./src/cli/make-service.ts"
   },
   "keywords": [],
   "author": "",

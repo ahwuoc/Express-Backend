@@ -25,7 +25,7 @@ import { SubscribeMessage } from "@/decorators/method.decorator";
   namespace: "/${name.toLowerCase()}",
   port: 3000,
 })
-export class ${className} implements AppGateway {
+export default class ${className} implements AppGateway {
   handleHandshake(socket: Socket): boolean | Promise<boolean> {
     return true;
   }

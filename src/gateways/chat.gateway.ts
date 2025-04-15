@@ -7,7 +7,7 @@ import { SubscribeMessage } from "@/decorators/method.decorator";
   namespace: "/chat",
   port: 3000,
 })
-export class ChatGateway implements AppGateway {
+export default class ChatGateway implements AppGateway {
   handleHandshake(socket: Socket): boolean | Promise<boolean> {
     return true;
   }

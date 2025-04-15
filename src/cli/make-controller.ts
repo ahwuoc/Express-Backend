@@ -22,7 +22,7 @@ import { Request, Response } from "express";
 import { Controller } from "@/decorators/controller.decorator";
 
 @Controller("${className}")
-export class ${className} {
+export default class ${className} {
   @Get("/")
   getAll(@Req() req: Request, @Res() res: Response) {
     res.send("${className} works!");

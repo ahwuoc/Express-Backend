@@ -7,7 +7,7 @@ import { SubscribeMessage } from "@/decorators/method.decorator";
   namespace: "/notifcation",
   port: 3000,
 })
-export class notifcationGateway implements AppGateway {
+export default class notifcationGateway implements AppGateway {
   handleHandshake(socket: Socket): boolean | Promise<boolean> {
     return true;
   }
