@@ -4,8 +4,6 @@ import connectMongo from "./db/connect.db";
 import AuthGuard from "./guards/auth.guard";
 import dotenv from "dotenv";
 import { SingleFileUploadMiddleware } from "./middlewares/single-upload.middleware";
-import path from "path";
-import express from "express";
 import { BaseResponseFormatter } from "./interceptors/response-formatter.interceptor";
 import { ValidationPipe } from "./pipes/validation.pipe";
 import importDynamic from "./utils/importControllers";
@@ -31,8 +29,8 @@ const App = new AppManager({
 });
 
 (async () => {
-  // await connectMongo();
-  App.use("/static", express.static(path.resolve("./uploads")));
+  await connectMongo();
+  App.pathStatic("/public", "./uploads");
   App.init();
   App.listen(PORT, () => {
     console.log(`🌟 Server running at http://localhost:${PORT}`);

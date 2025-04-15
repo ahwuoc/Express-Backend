@@ -1,6 +1,7 @@
 # 🚀 Express DI Decorator Framework
 
-Một hệ thống backend xây dựng trên nền **Express** sử dụng **TypeScript**, kết hợp **Dependency Injection** và **Decorator** để tạo kiến trúc sạch, dễ mở rộng.
+Một hệ thống backend xây dựng trên nền **Express** sử dụng **TypeScript**, kết hợp **Dependency Injection** và **Decorator** để tạo kiến trúc sạch, dễ mở rộng.  
+A backend system built on **Express** using **TypeScript**, combined with **Dependency Injection** and **Decorator** to create a clean, extensible architecture.
 
 ---
 
@@ -9,7 +10,10 @@ Một hệ thống backend xây dựng trên nền **Express** sử dụng **Typ
 - [🔧 Tính năng](#-tính-năng)
 - [💡 Yêu cầu](#-yêu-cầu)
 - [📦 Cài đặt](#-cài-đặt)
-- [🚀 Hướng dẫn sử dụng](#-hướng-dẫn-sử-dụng)
+- [🛠️ Dev Commands](#️-dev-commands)
+- [📜 Các lệnh phổ biến](#-các-lệnh-phổ-biến)
+- [🏷️ Các Decorator phổ biến](#-các-decorator-phổ-biến)
+- [🛠️ Dev Commands](#️-dev-commands)
 
 ---
 
@@ -34,16 +38,37 @@ Một hệ thống backend xây dựng trên nền **Express** sử dụng **Typ
 ```bash
 # Clone repo
 git clone <your-repo-url>
-cd <project-folder>
-
 # Cài dependencies
 npm install
 # hoặc dùng pnpm
 pnpm install
+pnpm install
 # 🚀 Hướng dẫn sử dụng
 
+Để sử dụng framework này, bạn có thể làm theo các bước sau:
 
-## Các lênh  phổ biến:
+1. Tạo một controller mới bằng lệnh:
+   ```bash
+   npm run make:controller <name>
+   ```
+
+2. Tạo một service mới bằng lệnh:
+   ```bash
+   npm run make:service <name>
+   ```
+
+3. Chạy ứng dụng trong chế độ phát triển:
+   ```bash
+   npm run dev
+   ```
+
+4. Build ứng dụng để triển khai:
+   ```bash
+   npm run build
+   ```
+
+
+## Các lệnh phổ biến:
 npm run make:controller name : lệnh tạo controller
 npm run make:gateway name : lệnh tạo socket
 npm run make:service Common : lệnh tạo service
@@ -88,8 +113,7 @@ npm run make:service Common : lệnh tạo service
       return this.userService.getUsers();
     }
   }
- ####🌐 Method Decorators (HTTP)
-@Get() - Định nghĩa method GET
+ #### 🌐 Method Decorators (HTTP)
 
 @Post() - Định nghĩa method POST
 
@@ -97,7 +121,7 @@ npm run make:service Common : lệnh tạo service
 
 @Delete() - Định nghĩa method DELETE
 
-####📦 Param & Body
+#### 📦 Param & Body
 Lấy tham số và dữ liệu body:
 @Get(":id")
 getUser(@Param("id") id: string) {
@@ -109,9 +133,7 @@ create(@Body() body: any) {
   return `Creating user with data: ${JSON.stringify(body)}`;
 }
 🛠️ Dev Commands
-Chạy các lệnh phát triển ứng dụng:
 
---bash
---npm run dev  
---npm run build 
-<details> 
+Chạy các lệnh phát triển ứng dụng:
+</details>npm run dev  
+npm run build 

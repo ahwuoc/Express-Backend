@@ -1,7 +1,7 @@
 import { BadRequestException } from "../core/base/error.base";
 import Injectable from "../core/decorators/InjecTable.decorator";
 import { Inject } from "../core/decorators/params.decorator";
-import UserModel from "../model/use.model";
+import UserModel from "../model/user.model";
 import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
 @Injectable()

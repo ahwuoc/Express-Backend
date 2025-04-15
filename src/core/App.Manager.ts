@@ -12,6 +12,7 @@ import {
   Request,
   TGateway,
 } from "./utils/types";
+import path from "path";
 import http from "http";
 import { Server, Socket } from "socket.io";
 import { Constructor, MiddlewareFunction } from "./utils/types";
@@ -170,6 +171,9 @@ export default class AppManager {
     }
   }
 
+  public pathStatic(pathStatic: string, folder: string) {
+    this.app.use(pathStatic, express.static(path.resolve(folder)));
+  }
   private DIregister(constructor: Constructor<any>) {
     this.container.register(constructor);
     return this.container.get(constructor);
