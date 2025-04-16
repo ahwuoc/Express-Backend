@@ -1,7 +1,8 @@
-import UserModel from "../models/user.model";
-import Injectable from "../core/decorators/InjecTable.decorator";
-import { Inject } from "../core/decorators/params.decorator";
-import { BadRequestException } from "../core/base/error.base";
+import Injectable from "@/decorators/InjecTable.decorator";
+import UserModel from "@/models/user.model";
+import { BadRequestException } from "@/erros";
+import { Inject } from "@/decorators/params.decorator";
+
 @Injectable()
 export default class userService {
   constructor(@Inject(UserModel) private userModel: typeof UserModel) {}

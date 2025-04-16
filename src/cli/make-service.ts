@@ -17,11 +17,11 @@ if (fs.existsSync(filePath)) {
   process.exit(1);
 }
 
-const serviceContent = `import Injectable from "../core/decorators/InjecTable.decorator";
+const serviceContent = `import Injectable from "@/decorators/InjecTable.decorator";
 
 @Injectable()
 export default class ${className} {
-  createUser() {
+  create${serviceName}() {
     return "Logic ${serviceName}Services";
   }
 }

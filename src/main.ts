@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import { SingleFileUploadMiddleware } from "./middlewares/single-upload.middleware";
 import { BaseResponseFormatter } from "./interceptors/response-formatter.interceptor";
 import { ValidationPipe } from "./pipes/validation.pipe";
-import importDynamic from "./utils/importControllers";
 dotenv.config();
 const PORT = 3000;
 const App = new AppManager({
@@ -24,7 +23,6 @@ const App = new AppManager({
     },
   ],
   interceptors: [BaseResponseFormatter],
-  pipes: [ValidationPipe],
 });
 
 (async () => {

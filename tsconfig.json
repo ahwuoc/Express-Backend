@@ -15,7 +15,9 @@
       "@/*": ["src/*"], 
       "@/decorators/*": ["src/core/decorators/*"],
       "@/controllers/*": ["src/controllers/*"],
-      "@/services/*": ["src/services/*"]
+      "@/services/*": ["src/services/*"],
+      "@/models/*":["src/models/*"],
+      "@/erros":["src/core/base/error.base.ts"]
     }
   },
   "include": [

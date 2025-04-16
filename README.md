@@ -10,7 +10,6 @@ A backend system built on **Express** using **TypeScript**, combined with **Depe
 - [🔧 Tính năng](#-tính-năng)
 - [💡 Yêu cầu](#-yêu-cầu)
 - [📦 Cài đặt](#-cài-đặt)
-- [🛠️ Dev Commands](#️-dev-commands)
 - [📜 Các lệnh phổ biến](#-các-lệnh-phổ-biến)
 - [🏷️ Các Decorator phổ biến](#-các-decorator-phổ-biến)
 - [🛠️ Dev Commands](#️-dev-commands)
@@ -41,7 +40,6 @@ git clone <your-repo-url>
 # Cài dependencies
 npm install
 # hoặc dùng pnpm
-pnpm install
 pnpm install
 # 🚀 Hướng dẫn sử dụng
 
@@ -95,6 +93,8 @@ npm run make:service Common : lệnh tạo service
   - `@Injectable()` - Dùng cho service, cho phép inject
   - `@Inject(UserService)` - Inject thủ công nếu cần
   **Ví dụ về Service & Controller:**
+  > **Lưu ý:** Đặt các file này trong thư mục `src/services` và `src/controllers` tương ứng để duy trì cấu trúc dự án rõ ràng.
+
   @Injectable()
   export class UserService {
     getUsers() {
@@ -113,7 +113,11 @@ npm run make:service Common : lệnh tạo service
       return this.userService.getUsers();
     }
   }
- #### 🌐 Method Decorators (HTTP)
+@Post() - Định nghĩa method POST
+@Post()
+createUser(@Body() body: any) {
+  return `Creating user with data: ${JSON.stringify(body)}`;
+}
 
 @Post() - Định nghĩa method POST
 

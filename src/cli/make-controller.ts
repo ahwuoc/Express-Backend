@@ -21,7 +21,7 @@ import { Body, Param, Req, Res } from "@/decorators/params.decorator";
 import { Request, Response } from "express";
 import { Controller } from "@/decorators/controller.decorator";
 
-@Controller("${className}")
+@Controller("/${name}")
 export default class ${className} {
   @Get("/")
   getAll(@Req() req: Request, @Res() res: Response) {
