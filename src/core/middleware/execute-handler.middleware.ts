@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import { Request } from "../utils/types";
 import AppMiddleware from "../base/middleware.base";
-import Injectable from "../decorators/InjecTable.decorator";
+import Injectable from "../decorators/injectable.decorator";
 Injectable();
 export default class ExecuteHandlerMiddleware implements AppMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {

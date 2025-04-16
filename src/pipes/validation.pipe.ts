@@ -1,6 +1,6 @@
 import { plainToInstance } from "class-transformer";
 import { AppPipes } from "../core/base/pipe.base";
-import Injectable from "@/decorators/InjecTable.decorator";
+import Injectable from "@/core/decorators/injectable.decorator";
 import { validate } from "class-validator";
 import { BadRequestException } from "../core/base/error.base";
 

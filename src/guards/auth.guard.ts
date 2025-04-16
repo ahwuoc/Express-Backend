@@ -1,34 +1,31 @@
-import passport from "passport";
-import { AppContext } from "../core/base/context.base";
 import { AppGuard } from "../core/base/guard.base";
-import Injectable from "../core/decorators/InjecTable.decorator";
-import { Inject } from "../core/decorators/params.decorator";
+import { AppContext } from "../core/base/context.base";
+import { UnAuthorizedException } from "../core/base/error.base";
 import { PassportService } from "../services/passport.service";
+import { PROTECTED_METADATA_KEY } from "../utils/constant";
+import { JwtPayload } from "jsonwebtoken";
+import Injectable from "../core/decorators/injectable.decorator";
 import { JwtStrategy } from "../strategies/jwt.strategies";
 import { getMetadata } from "../core/metedata/metadata";
-import { METADATA_KEYS } from "../core/utils/constant";
-import { JwtPayload } from "jsonwebtoken";
-import { UnAuthorizedException } from "../core/base/error.base";
 
 @Injectable()
 export default class AuthGuard extends AppGuard {
   constructor(
     jwtStrategy: JwtStrategy,
-    @Inject(PassportService) private passportServie: PassportService
+    private passportService: PassportService
   ) {
     super();
   }
-  canActive(context: AppContext): boolean | Promise<boolean> {
-    const passport = this.passportServie.passport;
+  canActive(context: AppContext): boolean {
+    const passport = this.passportService.passport;
     const controllerClass = context.getClass();
     const handler = context.getHandler();
-    const req = context.switchToHtppRequest();
-    const res = context.switchToHtppResponse();
+    const req = context.switchToHttpRequest();
+    const res = context.switchToHttpResponse();
     const next = context.getNextFunction();
-
     const isProtected =
-      getMetadata(METADATA_KEYS.protected_metadata_key, handler) ??
-      getMetadata(METADATA_KEYS.protected_metadata_key, controllerClass);
+      getMetadata(PROTECTED_METADATA_KEY, handler) ??
+      getMetadata(PROTECTED_METADATA_KEY, controllerClass);
     if (!isProtected) {
       return true;
     }
@@ -37,8 +34,9 @@ export default class AuthGuard extends AppGuard {
       { session: false },
       (error: any, payload: JwtPayload, info: any) => {
         if (error || info) {
-          throw new UnAuthorizedException();
+          next(new UnAuthorizedException());
         }
+        console.log("Quyền truy cập hợp lệ", payload);
         return true;
       }
     )(req, res, next);

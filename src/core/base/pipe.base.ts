@@ -1,4 +1,4 @@
-import Injectable from "../decorators/InjecTable.decorator";
+import Injectable from "../decorators/injectable.decorator";
 
 @Injectable()
 export class AppPipes {

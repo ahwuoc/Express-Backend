@@ -1,5 +1,5 @@
 import { concatMap, Observable, from } from "rxjs";
-import Injectable from "../decorators/InjecTable.decorator";
+import Injectable from "../decorators/injectable.decorator";
 import { NextFunction, Request, Response } from "express";
 @Injectable()
 export class NextCallFunction {

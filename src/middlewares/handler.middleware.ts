@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import AppMiddleware from "../core/base/middleware.base";
-import Injectable from "../core/decorators/InjecTable.decorator";
+import Injectable from "../core/decorators/injectable.decorator";
 import { Request } from "../core/utils/types";
 
 @Injectable()

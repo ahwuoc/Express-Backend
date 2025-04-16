@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import Injectable from "../decorators/InjecTable.decorator";
+import Injectable from "../decorators/injectable.decorator";
 import { AppContext } from "./context.base";
 import { NextCallFunction } from "./next-call-function.base";
 

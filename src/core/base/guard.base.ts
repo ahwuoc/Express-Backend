@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import Injectable from "../decorators/InjecTable.decorator";
+import Injectable from "../decorators/injectable.decorator";
 import { Request } from "../utils/types";
 import AppMiddleware from "./middleware.base";
 import { AppContext } from "./context.base";

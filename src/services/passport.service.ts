@@ -1,7 +1,7 @@
 import passport from "passport";
-import Injectable from "../core/decorators/InjecTable.decorator";
+import Injectable from "@/decorators/injectable.decorator";
 
 @Injectable()
 export class PassportService {
-  passport = passport;
+  public passport = passport;
 }

@@ -1,4 +1,4 @@
-import Injectable from "@/decorators/InjecTable.decorator";
+import Injectable from "@/core/decorators/injectable.decorator";
 import UserModel from "@/models/user.model";
 import { BadRequestException } from "@/erros";
 import { Inject } from "@/decorators/params.decorator";

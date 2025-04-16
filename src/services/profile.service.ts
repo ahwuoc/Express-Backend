@@ -1,4 +1,4 @@
-import Injectable from "../core/decorators/InjecTable.decorator";
+import Injectable from "../core/decorators/injectable.decorator";
 
 @Injectable()
 export default class profileService {}

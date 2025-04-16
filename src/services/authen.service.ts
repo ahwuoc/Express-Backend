@@ -1,5 +1,5 @@
 import { BadRequestException } from "../core/base/error.base";
-import Injectable from "../core/decorators/InjecTable.decorator";
+import Injectable from "../core/decorators/injectable.decorator";
 import { Inject } from "../core/decorators/params.decorator";
 import UserModel from "../models/user.model";
 import jwt from "jsonwebtoken";

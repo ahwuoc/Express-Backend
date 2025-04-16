@@ -3,9 +3,10 @@ import { Controller } from "@/decorators/controller.decorator";
 import { Body, Inject, Param } from "@/decorators/params.decorator";
 import userService from "../services/user.service";
 import { CreateDtoUser } from "../dto/user.dto";
-import { UsePipes } from "../core/decorators/use-pipes.decorator";
+import { UsePipes } from "@/decorators/use-pipes.decorator";
 import { ValidationPipe } from "../pipes/validation.pipe";
-import { Request } from "express";
+import { Protected } from "@/decorators/protected.decorator";
+@Protected()
 @Controller("/users")
 export default class useController {
   constructor(@Inject(userService) private userService: userService) {}
@@ -14,14 +15,14 @@ export default class useController {
     return this.userService.find();
   }
 
+  @UsePipes(ValidationPipe)
   @Get(":id")
   getId(@Param("id") param: any) {
-    return param;
+    return this.userService.findOne(param);
   }
-
   @UsePipes(ValidationPipe)
   @Post()
   addUsers(@Body() body: CreateDtoUser) {
-    return body;
+    return this.userService.createUser(body);
   }
 }

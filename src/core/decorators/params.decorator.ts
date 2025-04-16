@@ -7,19 +7,19 @@ export const Inject = (value: any): ParameterDecorator =>
   setMetadata(METADATA_KEYS.param_metadata_key, value);
 export const Body = (): ParameterDecorator =>
   createParamDecorator((context) => {
-    const req = context.switchToHtppRequest();
+    const req = context.switchToHttpRequest();
     return req.body;
   });
 
 export const Req = (): ParameterDecorator =>
-  createParamDecorator((context) => context.switchToHtppRequest());
+  createParamDecorator((context) => context.switchToHttpRequest());
 
 export const Res = (): ParameterDecorator =>
-  createParamDecorator((context) => context.switchToHtppRequest());
+  createParamDecorator((context) => context.switchToHttpRequest());
 
 export const Param = (field: string): ParameterDecorator =>
   createParamDecorator((context) => {
-    const req = context.switchToHtppRequest();
+    const req = context.switchToHttpRequest();
     return req.params[field];
   });
 

@@ -29,10 +29,6 @@ export class CreateDtoUser {
   status!: number;
 
   @Expose()
-  @IsDate({ message: "Ngày tham gia không hợp lệ!" })
-  join!: Date;
-
-  @Expose()
   @IsInt({ message: "Loại người dùng phải là một số nguyên!" })
   userType!: number;
 }

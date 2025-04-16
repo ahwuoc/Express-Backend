@@ -1,5 +1,5 @@
 import type { Response, NextFunction } from "express";
-import Injectable from "../decorators/InjecTable.decorator";
+import Injectable from "../decorators/injectable.decorator";
 import { Constructor, Request } from "../utils/types";
 
 @Injectable()
@@ -16,10 +16,10 @@ export class AppContext {
     this.response = res;
     this.next = next;
   }
-  switchToHtppRequest() {
+  switchToHttpRequest() {
     return this.request;
   }
-  switchToHtppResponse() {
+  switchToHttpResponse() {
     return this.response;
   }
   getClass() {
@@ -31,5 +31,4 @@ export class AppContext {
   getNextFunction() {
     return this.next;
   }
-
 }

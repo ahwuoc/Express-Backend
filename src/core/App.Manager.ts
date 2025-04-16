@@ -219,7 +219,7 @@ export default class AppManager {
           }
         );
         console.log(
-          `\x1b[32m🗸 Đăng ký route thành công [\x1b[33m${router.method}\x1b[32m] \x1b[34m${path}\x1b[0m`
+          `\x1b[32m🗸 Đăng ký route thành công [\x1b[33m${router.method}\x1b[32m] \x1b[34m${router.path}\x1b[0m`
         );
       });
     });

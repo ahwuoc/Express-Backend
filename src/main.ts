@@ -1,11 +1,11 @@
 import "reflect-metadata";
 import AppManager from "./core/App.Manager";
 import connectMongo from "./db/connect.db";
-import AuthGuard from "./guards/auth.guard";
 import dotenv from "dotenv";
 import { SingleFileUploadMiddleware } from "./middlewares/single-upload.middleware";
 import { BaseResponseFormatter } from "./interceptors/response-formatter.interceptor";
 import { ValidationPipe } from "./pipes/validation.pipe";
+import AuthGuard from "./guards/auth.guard";
 dotenv.config();
 const PORT = 3000;
 const App = new AppManager({
@@ -16,12 +16,7 @@ const App = new AppManager({
       useClass: SingleFileUploadMiddleware,
     },
   ],
-  guards: [
-    {
-      forRoutes: ["/users"],
-      useClass: AuthGuard,
-    },
-  ],
+  guards: [AuthGuard],
   interceptors: [BaseResponseFormatter],
 });
 

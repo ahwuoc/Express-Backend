@@ -1,6 +1,6 @@
 import path from "path";
 import multer, { Multer } from "multer";
-import Injectable from "../core/decorators/InjecTable.decorator";
+import Injectable from "../core/decorators/injectable.decorator";
 import { Request } from "express";
 
 type TUploader = {

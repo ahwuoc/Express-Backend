@@ -1,7 +1,7 @@
 export class BadRequestException extends Error {
-  statusCode!: number;
-  message!: any;
-  constructor(message: any) {
+  statusCode: number;
+  message: any;
+  constructor(message: any = "Bad Request") {
     super(message);
     if (Array.isArray(message)) {
       this.message = message;
@@ -26,6 +26,6 @@ export class UnAuthorizedException extends Error {
   constructor() {
     super();
     this.statusCode = 401;
-    this.message = "UnAuthorized";
+    this.message = "unauthorized";
   }
 }
