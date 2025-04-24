@@ -9,12 +9,10 @@ export default class orderController {
   getAll(@Req() req: Request, @Res() res: Response) {
     res.send("orderController works!");
   }
-
   @Get(":id")
   getId(@Param("id") id: number) {
     console.log(id);
   }
-
   @Post("/")
   postAll(@Body() body: any, @Req() req: Request, @Res() res: Response) {
     res.send("body works!");

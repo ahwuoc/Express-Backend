@@ -15,7 +15,6 @@ export type Request = ERequest & {
     params: any;
   };
 };
-
 export interface MetadataStorage {
   metadata?: Record<string | symbol, any>;
   paramMetadata?: Array<{
@@ -57,3 +56,22 @@ export type MiddlewareForRoute = {
   forRoutes: string[];
   useClass: MiddlewareClass;
 };
+export interface TAppManager {
+  controllers: Constructor<any>[];
+  middlewares: TMiddleware;
+  interceptors: TInterceptor;
+  prefix: string[];
+  guards: TMiddleware;
+  pipes: TPipes;
+}
+export type TAppManagerConfig = Partial<TAppManager>;
+
+export type TInterceptor = (Constructor<any> | MiddlewareForRoute)[];
+export type TPipes = (Constructor<any> | MiddlewareForRoute)[];
+
+export type TMiddleware = (
+  | MiddlewareFunction
+  | MiddlewareFunctionError
+  | MiddlewareClass
+  | MiddlewareForRoute
+)[];

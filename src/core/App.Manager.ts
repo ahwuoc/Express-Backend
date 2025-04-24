@@ -10,7 +10,12 @@ import {
   MiddlewareForRoute,
   MiddlewareFunctionError,
   Request,
+  TAppManager,
+  TAppManagerConfig,
   TGateway,
+  TInterceptor,
+  TMiddleware,
+  TPipes,
 } from "./utils/types";
 import path from "path";
 import http from "http";
@@ -22,23 +27,6 @@ import { UnAuthorizedException } from "./base/error.base";
 import { NextCallFunction } from "./base/next-call-function.base";
 import { AppContext } from "./base/context.base";
 import importDynamic from "../utils/importControllers";
-export interface TAppManager {
-  controllers?: Constructor<any>[];
-  middlewares?: any[];
-  interceptors?: TInterceptor;
-  prefix?: string[];
-  guards?: TMiddleware;
-  pipes?: TPipes;
-}
-
-export type TInterceptor = (Constructor<any> | MiddlewareForRoute)[];
-export type TPipes = (Constructor<any> | MiddlewareForRoute)[];
-export type TMiddleware = (
-  | MiddlewareFunction
-  | MiddlewareFunctionError
-  | MiddlewareClass
-  | MiddlewareForRoute
-)[];
 
 export default class AppManager {
   private controllers: Constructor<any>[];
@@ -59,8 +47,8 @@ export default class AppManager {
     prefix,
     guards,
     pipes,
-  }: TAppManager) {
-    this.controllers = importDynamic() ?? [];
+  }: TAppManagerConfig) {
+    this.controllers = controllers ?? [];
     this.container = new Container();
     this.middlewares = middlewares ?? [];
     this.app = express();
@@ -71,6 +59,7 @@ export default class AppManager {
   }
 
   public init() {
+    this.addController();
     this.applyMiddlewares(
       express.json(),
       express.urlencoded({ extended: true })
@@ -81,6 +70,9 @@ export default class AppManager {
     this.applyMiddlewares(NotFoundMiddleware);
   }
 
+  public addController() {
+    this.controllers = importDynamic();
+  }
   private instanceRegister() {
     this.controllers.map((controller) => {
       const controllerPath = getMetadata(

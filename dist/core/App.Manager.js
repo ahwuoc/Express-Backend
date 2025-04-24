@@ -154,7 +154,10 @@ class AppManager {
                     const instance = this.DIregister(error_handler_middleware_1.default);
                     instance.use(error, req, res, next);
                 });
-                console.log(`\x1b[32m🗸 Đăng ký route thành công [\x1b[33m${router.method}\x1b[32m] \x1b[34m${path}\x1b[0m`);
+                console.log(
+                    `\x1b[1m\x1b[32m🗸 Route [\x1b[33m${method.toUpperCase()}\x1b[32m] → \x1b[36m${path}\x1b[0m`
+                  );
+                  
             });
         });
     }

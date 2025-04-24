@@ -14,6 +14,8 @@ export default class authenticationController {
   getId(@Param("id") id: number) {
     console.log(id);
   }
+  @Post()
+  login() {}
 
   @Post("/")
   postAll(@Body() body: any, @Req() req: Request, @Res() res: Response) {
